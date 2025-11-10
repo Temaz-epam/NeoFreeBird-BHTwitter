@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "Atur Twitter kamu: sembunyikan iklan, aktifkan fitur Blue, dan lainnya.";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "Atur Twitter kamu: sembunyikan iklan, aktifkan fitur Blue, dan lainnya.";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Perlu Mulai Ulang";

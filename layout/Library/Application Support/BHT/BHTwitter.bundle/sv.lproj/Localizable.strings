@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "Justera Twitter. Dölj annonser, aktivera Blue-funktioner och mycket mer.";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "Justera Twitter. Dölj annonser, aktivera Blue-funktioner och mycket mer.";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Omstart krävs";
@@ -334,7 +334,7 @@
 "CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_3" = "Återställ standard";
 
 /*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweetad";
+"REFRESH_PILL_TEXT" = "Tweetade";
 
 /*Deprecated*/
 "TRUSTED_FRIENSS_OPTION_TITLE" = "Twitter-cirklar";

@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "自訂你的 Twitter：隱藏廣告、啟用 Blue 功能，還有更多。";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "自訂你的 Twitter：隱藏廣告、啟用 Blue 功能，還有更多。";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "需要重新啟動";

@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "Настрой Twitter: убери рекламу, включи Blue-функции и многое другое.";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "Настрой Twitter: убери рекламу, включи Blue-функции и многое другое.";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Требуется перезапуск";

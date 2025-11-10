@@ -667,13 +667,13 @@ static inline UIImage *BHTVectorIcon(NSString *name, CGFloat size) {
 }
 
 static inline NSString *BHTIconNameForKey(NSString *key) {
-    if ([key isEqualToString:@"button"])   return @"clone";
+    if ([key isEqualToString:@"button"])   return @"copy_stroke";
     if ([key isEqualToString:@"bio"])      return @"cards";
     if ([key isEqualToString:@"username"]) return @"at";
     if ([key isEqualToString:@"fullname"]) return @"account";
     if ([key isEqualToString:@"url"])      return @"link";
     if ([key isEqualToString:@"location"]) return @"location_stroke";
-    return @"clone";
+    return @"copy_stroke";
 }
 
 %hook T1ProfileHeaderViewController
@@ -1841,7 +1841,7 @@ static inline NSString *BHTIconNameForKey(NSString *key) {
         twitterIcon = [UIImage tfn_vectorImageNamed:@"twitter" fitsSize:CGSizeMake(20, 20) fillColor:iconColor];
 
         // Create the settings item
-        TFNSettingsNavigationItem *bhtwitter = [[%c(TFNSettingsNavigationItem) alloc] initWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"] detail:[[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_DETAIL"] iconName:nil controllerFactory:^UIViewController *{
+        TFNSettingsNavigationItem *bhtwitter = [[%c(TFNSettingsNavigationItem) alloc] initWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"] detail:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"] iconName:nil controllerFactory:^UIViewController *{
             return [BHTManager BHTSettingsWithAccount:self.account];
         }];
 
@@ -1880,14 +1880,14 @@ static inline NSString *BHTIconNameForKey(NSString *key) {
 
         TFNTextCell *Tweakcell = [[%c(TFNTextCell) alloc] init];
         [Tweakcell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        [Tweakcell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_DETAIL"]];
+        [Tweakcell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"]];
         return Tweakcell;
     } else if (indexPath.section == 0 && indexPath.row == 0) {
 
         TFNTextCell *Settingscell = [[%c(TFNTextCell) alloc] init];
         [Settingscell setBackgroundColor:[UIColor clearColor]];
         Settingscell.textLabel.textColor = [UIColor colorWithRed:0.40 green:0.47 blue:0.53 alpha:1.0];
-        [Settingscell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"]];
+        [Settingscell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"]];
         return Settingscell;
     }
 

@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "Prilagodi Twitter: ukloni oglase, uključi Blue značajke i više.";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "Prilagodi Twitter: ukloni oglase, uključi Blue značajke i više.";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Potrebno ponovno pokretanje";

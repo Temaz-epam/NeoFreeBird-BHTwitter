@@ -60,6 +60,29 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 
 @implementation BHCustomTabBarViewController
 
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout *)collectionViewLayout;
+    UIEdgeInsets insets = flow.sectionInset;
+    CGFloat spacing = flow.minimumInteritemSpacing;
+
+    CGFloat width = CGRectGetWidth(collectionView.bounds);
+    CGFloat available = width - insets.left - insets.right;
+
+    // Choose columns by common device widths
+    NSInteger columns = 3;               // small iPhones
+    if (width >= 428)  columns = 4;      // iPhone Pro Max / Plus
+    if (width >= 768)  columns = 5;      // iPad portrait
+    if (width >= 834)  columns = 5;      // iPad Air/Pro portrait
+    if (width >= 1024) columns = 6;      // iPad landscape
+
+    CGFloat itemWidth = floor((available - spacing * (columns - 1)) / columns);
+    // Add label height like before
+    return CGSizeMake(itemWidth, itemWidth + 30.0);
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -67,6 +90,11 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
     for (UIWindow *window in [UIApplication sharedApplication].windows) {
         [self findAndHideFloatingActionButtonInView:window];
     }
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 - (void)findAndHideFloatingActionButtonInView:(UIView *)view {
@@ -158,11 +186,10 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
     CGFloat padding = 20 * 2 + 20 * 2;
     CGFloat itemWidth = (self.view.bounds.size.width - padding) / 3;
 
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake(itemWidth, itemWidth + 30);
-    layout.minimumInteritemSpacing = 20;
-    layout.minimumLineSpacing = 20;
-    layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20);
+UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+layout.minimumInteritemSpacing = 10;
+layout.minimumLineSpacing = 10;
+layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
 
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;

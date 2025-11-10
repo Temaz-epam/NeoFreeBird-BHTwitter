@@ -3,8 +3,8 @@
   NeoFreeBird
 */
 
-"BHTWITTER_SETTINGS_TITLE" = "NeoFreeBird";
-"BHTWITTER_SETTINGS_DETAIL" = "Tweak your Twitter. Hide ads, enable Blue features, and much more.";
+"NFB_SETTINGS_TITLE" = "NeoFreeBird";
+"NFB_SETTINGS_DETAIL" = "Tweak your Twitter. Hide ads, enable Blue features, and much more.";
 
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Restart required";
@@ -295,7 +295,7 @@
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Copy bio";
 "COPY_PROFILE_INFO_MENU_OPTION_2" = "Copy username";
 "COPY_PROFILE_INFO_MENU_OPTION_3" = "Copy name";
-"COPY_PROFILE_INFO_MENU_OPTION_4" = "Copy bio link";
+"COPY_PROFILE_INFO_MENU_OPTION_4" = "Copy website";
 "COPY_PROFILE_INFO_MENU_OPTION_5" = "Copy location";
 
 /*Theme*/
@@ -343,6 +343,16 @@
 /*Refresh pill text*/
 "REFRESH_PILL_TEXT" = "Tweeted";
 
+"NOTIF_REPLACE_POST_WITH_TWEET_OPTION_TITLE" = "Post to Tweet replacer in notifications";
+"NOTIF_REPLACE_POST_WITH_TWEET_DETAIL_TITLE" = "Replaces 'Post' with 'Tweet' in the notifications pane. This affects *all* text in notifications, so if a Tweet contains the word 'post', it will be replaced too.";
+
+"COLOR_TWITTER_ICON_OPTION_TITLE" = "Color Twitter icon";
+"COLOR_TWITTER_ICON_DETAIL_TITLE" = "Applies the accent color to the Twitter icon in the top bar.";
+
+"REFRESH_PILL_OPTION_TITLE" = "Add 'Tweeted' to refresh pill";
+"REFRESH_PILL_OPTION_DETAIL_TITLE" = "Adds back the 'Tweeted' label to the refresh pill when someone Tweets. This may (incorrectly) appear in some other areas too.";
+
+
 /*Deprecated*/
 "TRUSTED_FRIENSS_OPTION_TITLE" = "Twitter Circles";
 
@@ -381,6 +391,9 @@
 "MODERN_SETTINGS_MESSAGES_TITLE" = "Messages";
 "MODERN_SETTINGS_MESSAGES_SUBTITLE" = "Customize your Twitter messaging experience.";
 
+"MODERN_SETTINGS_BRANDING_TITLE" = "Branding";
+"MODERN_SETTINGS_BRANDING_SUBTITLE" = "Adjust how much of the Twitter branding reverts you see.";
+
 "MODERN_SETTINGS_EXPERIMENTAL_TITLE" = "Labs";
 "MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE" = "Try features we're currently testing.";
 
@@ -392,6 +405,7 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Follow NeoFreeBird";
 
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Nothing to see here - yet";
+"MODERN_SETTINGS_PLACEHOLDER_DETAIL_TEXT" = "We aren't currently testing any new features. Check back later!";
 
 
 "SOURCE_UNAVAILABLE" = "Source Unavailable";

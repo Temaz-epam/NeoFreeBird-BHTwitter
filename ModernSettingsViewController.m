@@ -35,6 +35,10 @@
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account;
 @end
 
+@interface BrandingSettingsViewController : UIViewController
+- (instancetype)initWithAccount:(TFNTwitterAccount *)account;
+@end
+
 @interface ExperimentalSettingsViewController : UIViewController
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account;
 @end
@@ -471,7 +475,7 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 
         UILabel *subtitleLabel = [[UILabel alloc] init];
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        subtitleLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_DETAIL"];
+        subtitleLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"];
         subtitleLabel.numberOfLines = 0;
         subtitleLabel.textAlignment = NSTextAlignmentLeft;
 
@@ -603,6 +607,9 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_MESSAGES_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_MESSAGES_SUBTITLE"],
            @"icon": @"messages_stroke", @"action": @"showMessagesSettings" },
+        @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_BRANDING_TITLE"],
+           @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_BRANDING_SUBTITLE"],
+           @"icon": @"hash_stroke", @"action": @"showBrandingSettings" },
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_EXPERIMENTAL_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE"],
            @"icon": @"flask", @"action": @"showExperimentalSettings" },
@@ -654,9 +661,9 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 - (void)setupNavigationBar {
     self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
     if (self.account) {
-        self.navigationItem.titleView = [objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"] subtitle:self.account.displayUsername];
+        self.navigationItem.titleView = [objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"] subtitle:self.account.displayUsername];
     } else {
-        self.title = [[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"];
+        self.title = [[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"];
     }
 }
 
@@ -690,7 +697,7 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 
     UILabel *footerLabel = [[UILabel alloc] init];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    footerLabel.text = @"NeoFreeBird v2.2 (release)\nNeoFreeBird-BHTwitter v5.2.1 (release)";
+    footerLabel.text = @"NeoFreeBird v2.2 (release)\nNeoFreeBird-BHTwitter v5.3 (beta)";
     footerLabel.numberOfLines = 0;
     footerLabel.textAlignment = NSTextAlignmentLeft; // <-- Left aligned now
 
@@ -932,6 +939,11 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 
 - (void)showMessagesSettings {
     MessagesSettingsViewController *vc = [[MessagesSettingsViewController alloc] initWithAccount:self.account];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)showBrandingSettings {
+    BrandingSettingsViewController *vc = [[BrandingSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -1710,6 +1722,207 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 }
 
 @end
+
+// ==============================
+// BrandingSettingsViewController (cleaned - translate removed)
+// ==============================
+@interface BrandingSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) TFNTwitterAccount *account;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSArray<NSDictionary *> *toggles;
+@property (nonatomic, strong) NSArray<NSDictionary *> *visibleToggles;
+@end
+
+@implementation BrandingSettingsViewController
+
+- (instancetype)initWithAccount:(TFNTwitterAccount *)account {
+    if ((self = [super init])) {
+        self.account = account;
+        [self buildSettingsList];
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupNav];
+    [self setupTable];
+}
+
+- (void)setupNav {
+    NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_BRANDING_TITLE"];
+    if (self.account) {
+        self.navigationItem.titleView = [objc_getClass("TFNTitleView") titleViewWithTitle:title subtitle:self.account.displayUsername];
+    } else {
+        self.title = title;
+    }
+}
+
+- (void)setupTable {
+    self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 80;
+    [self.tableView registerClass:[ModernSettingsToggleCell class] forCellReuseIdentifier:@"ToggleCell"];
+    [self.tableView registerClass:[ModernSettingsTableViewCell class] forCellReuseIdentifier:@"ButtonCell"];
+    [self.tableView registerClass:[ModernSettingsCompactButtonCell class] forCellReuseIdentifier:@"CompactButtonCell"];
+    [self.view addSubview:self.tableView];
+}
+
+- (void)buildSettingsList {
+    self.toggles = @[
+        @{ @"key": @"notif_replace_post_with_tweet", @"titleKey": @"NOTIF_REPLACE_POST_WITH_TWEET_OPTION_TITLE", @"subtitleKey": @"NOTIF_REPLACE_POST_WITH_TWEET_DETAIL_TITLE", @"default": @YES, @"type": @"toggle" },
+        @{ @"key": @"refresh_pill_label", @"titleKey": @"REFRESH_PILL_OPTION_TITLE", @"subtitleKey": @"REFRESH_PILL_DETAIL_TITLE", @"default": @YES },
+        @{ @"key": @"color_twitter_icon_in_top_bar", @"titleKey": @"COLOR_TWITTER_ICON_OPTION_TITLE", @"subtitleKey": @"COLOR_TWITTER_ICON_DETAIL_TITLE", @"default": @YES }
+    ];
+    [self updateVisibleToggles];
+    [self.tableView reloadData];
+}
+
+- (void)updateVisibleToggles {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *visible = [NSMutableArray array];
+    for (NSDictionary *toggleData in self.toggles) {
+        NSString *parentKey = toggleData[@"parentKey"];
+        if (parentKey) {
+            BOOL parentEnabled = [[defaults objectForKey:parentKey] ?: toggleData[@"default"] boolValue];
+            if (parentEnabled) {
+                [visible addObject:toggleData];
+            }
+        } else {
+            [visible addObject:toggleData];
+        }
+    }
+    self.visibleToggles = [visible copy];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.visibleToggles.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *toggleData = self.visibleToggles[indexPath.row];
+    NSString *type = toggleData[@"type"];
+    if ([type isEqualToString:@"compactButton"]) {
+        ModernSettingsCompactButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CompactButtonCell" forIndexPath:indexPath];
+        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
+        NSString *subtitle = @"";
+        NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
+        if (prefKey) {
+            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: toggleData[@"subtitleDefault"];
+            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:toggleData[@"subtitleDefault"]]) {
+                subtitle = @"••••••••••••••••";
+            }
+        }
+        [cell configureWithTitle:title subtitle:subtitle];
+        return cell;
+    } else if ([type isEqualToString:@"button"]) {
+        ModernSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ButtonCell" forIndexPath:indexPath];
+        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
+        NSString *subtitle = @"";
+        NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
+        if (prefKey) {
+            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: toggleData[@"subtitleDefault"];
+            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:toggleData[@"subtitleDefault"]]) {
+                subtitle = @"••••••••••••••••";
+            }
+        }
+        NSString *iconName = toggleData[@"icon"];
+        [cell configureWithTitle:title subtitle:subtitle iconName:iconName];
+        return cell;
+    } else {
+        ModernSettingsToggleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ToggleCell" forIndexPath:indexPath];
+        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
+        NSString *subtitleKey = toggleData[@"subtitleKey"];
+        NSString *subtitle = (subtitleKey.length > 0) ? [[BHTBundle sharedBundle] localizedStringForKey:subtitleKey] : @"";
+        [cell configureWithTitle:title subtitle:subtitle];
+        NSString *key = toggleData[@"key"];
+        BOOL isEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:key] ?: toggleData[@"default"] boolValue];
+        cell.toggleSwitch.on = isEnabled;
+        objc_setAssociatedObject(cell.toggleSwitch, @"prefKey", key, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [cell addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+        return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *data = self.visibleToggles[indexPath.row];
+    if ([data[@"type"] isEqualToString:@"button"] || [data[@"type"] isEqualToString:@"compactButton"]) {
+        NSString *actionName = data[@"action"];
+        if (actionName) {
+            SEL action = NSSelectorFromString(actionName);
+            if ([self respondsToSelector:action]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                [self performSelector:action withObject:data];
+#pragma clang diagnostic pop
+            }
+        }
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 0)];
+    UILabel *label = [[UILabel alloc] init];
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    label.text = [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_BRANDING_SUBTITLE"];
+    label.numberOfLines = 0;
+    id fontGroup = [objc_getClass("TAEStandardFontGroup") sharedFontGroup];
+    label.font = [fontGroup performSelector:@selector(subtext2Font)];
+    Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
+    id settings = [TAEColorSettingsCls sharedSettings];
+    id colorPalette = [[settings currentColorPalette] colorPalette];
+    UIColor *subtitleColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    label.textColor = subtitleColor;
+    [header addSubview:label];
+    [NSLayoutConstraint activateConstraints:@[
+        [label.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:20],
+        [label.trailingAnchor constraintEqualToAnchor:header.trailingAnchor constant:-20],
+        [label.topAnchor constraintEqualToAnchor:header.topAnchor constant:8],
+        [label.bottomAnchor constraintEqualToAnchor:header.bottomAnchor constant:-8]
+    ]];
+    return header;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return UITableViewAutomaticDimension;
+}
+
+- (void)switchChanged:(UISwitch *)sender {
+    NSString *key = objc_getAssociatedObject(sender, @"prefKey");
+    if (key) {
+        [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:key];
+        if ([key isEqualToString:@"flex_twitter"]) {
+            if (sender.isOn) {
+                [[objc_getClass("FLEXManager") sharedManager] showExplorer];
+            } else {
+                [[objc_getClass("FLEXManager") sharedManager] hideExplorer];
+            }
+        }
+
+        if ([key isEqualToString:@"square_avatars"]) {
+            [self showRestartRequiredAlert:@"RESTART_REQUIRED_ALERT_MESSAGE_SQUARE_AVATARS"];
+        }
+    }
+}
+
+- (void)showRestartRequiredAlert:(NSString *)messageKey {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_TITLE"]
+                                                                   message:[[BHTBundle sharedBundle] localizedStringForKey:messageKey]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+@end
+
+
 
 // ==============================
 // ExperimentalSettingsViewController (cleaned - translate removed)

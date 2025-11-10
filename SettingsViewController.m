@@ -138,10 +138,10 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
 - (void)viewDidLoad {
     if (self.twAccount != nil) {
         self.navigationItem.titleView = [objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle]
-                               localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"] subtitle:self.twAccount.displayUsername];
+                               localizedStringForKey:@"NFB_SETTINGS_TITLE"] subtitle:self.twAccount.displayUsername];
     } else {
         self.title = [[BHTBundle sharedBundle]
-                               localizedStringForKey:@"BHTWITTER_SETTINGS_TITLE"];
+                               localizedStringForKey:@"NFB_SETTINGS_TITLE"];
     }
 
     [super viewDidLoad];
@@ -184,7 +184,7 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
         detail.textColor = [UIColor secondaryLabelColor];
         detail.numberOfLines = 0;
         detail.textAlignment = NSTextAlignmentLeft;
-        detail.text = [[BHTBundle sharedBundle] localizedStringForKey:@"BHTWITTER_SETTINGS_DETAIL"];
+        detail.text = [[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"];
 
         [header addSubview:detail];
         [NSLayoutConstraint activateConstraints:@[
